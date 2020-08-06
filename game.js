@@ -13,7 +13,7 @@ let my_count = document.querySelector('#my-count'),
     step_y = -2,
     fps = 60;
 
-start_round();
+document.addEventListener('keydown', manage_start);
 
 function get_random_integer(min, max) {
     let rand = min + Math.random() * (max + 1 - min);
@@ -39,6 +39,12 @@ function is_collision(x1, y1, w1, h1, x2, y2, w2, h2) {
     return x1 + w1 > x2 && x1 < x2 + w2 && y1 + h1 > y2 && y1 < y2 + h2;
 
     //return x1 < (x2 + w2) && y1 < (y2 + h2) && (x1 + w1) > x2 && (y1 + h1) > y2;
+}
+
+function manage_start(event) {
+    if (event.which == 13) {
+        start_round();
+    }
 }
 
 function manage_player(event) {

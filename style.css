@@ -1,6 +1,7 @@
 body {
     background: #222226;
     font-family: Calibri;
+    color: #ffffff;
     margin: 0;
     display: flex;
     align-items: center;
@@ -25,13 +26,14 @@ body {
 }
 .count {
     font-size: 40px;
-    color: #ffffff;
+
 }
 
 .game-window {
     background: #9d9d9d;
     width: 100%;
     min-height: 600px;
+    margin-bottom: 20px;
     position: relative;
     overflow: hidden;
 }
@@ -65,6 +67,10 @@ body {
     width: 30px;
     height: 30px;
     position: absolute;
-    top: calc(50% - 30px);
-    left: calc(50% - 30px);
+    top: calc(50% - 15px);
+    left: calc(50% - 15px);
+}
+
+.notice {
+    margin: 0;
 }
