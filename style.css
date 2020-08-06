@@ -1,0 +1,70 @@
+body {
+    background: #222226;
+    font-family: Calibri;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    min-height: 100vh;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+.container {
+    width: 100%;
+    max-width: 1200px;
+    margin: auto;
+}
+
+.counts {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+.count {
+    font-size: 40px;
+    color: #ffffff;
+}
+
+.game-window {
+    background: #9d9d9d;
+    width: 100%;
+    min-height: 600px;
+    position: relative;
+    overflow: hidden;
+}
+
+.game-window:after {
+    content: '';
+    border-right: 10px dashed #cacaca;
+    height: 100%;
+    display: block;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.racket {
+    background: #cacaca;
+    width: 20px;
+    height: 100px;
+    position: absolute;
+    right: 20px;
+    top: calc(50% - 50px);
+}
+
+.racket.my {
+    left: 20px;
+}
+
+.ball {
+    background: #cacaca;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    position: absolute;
+    top: calc(50% - 30px);
+    left: calc(50% - 30px);
+}
