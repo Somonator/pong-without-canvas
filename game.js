@@ -55,13 +55,13 @@ function manage_player_down(event) {
         if (event.which == 38 || event.which == 87) {
             animate(1000/fps, down, function() {
                 if (down == true && my_racket.getBoundingClientRect().top - 50 > game_window.getBoundingClientRect().top) {
-                    my_racket.style.top = my_racket.offsetTop - 2 + 'px';
+                    my_racket.style.top = my_racket.offsetTop - 5 + 'px';
                 }
             });
         } else if (event.which == 40 || event.which == 83) {
             animate(1000/fps, down, function() {
                 if (down == true && my_racket.getBoundingClientRect().bottom + 50 < game_window.getBoundingClientRect().bottom) {
-                    my_racket.style.top = my_racket.offsetTop + 2 + 'px';
+                    my_racket.style.top = my_racket.offsetTop + 5 + 'px';
                 }
             });
         }
@@ -77,17 +77,17 @@ function manage_opponent() {
         if (opp_racket.offsetTop + 20 > ball.offsetTop) {
             animate(1000/fps, 25, function() {
                 if (opp_racket.getBoundingClientRect().top - 50 > game_window.getBoundingClientRect().top) {
-                    opp_racket.style.top = opp_racket.offsetTop - 2 + 'px';
+                    opp_racket.style.top = opp_racket.offsetTop - 5 + 'px';
                 }
             });
         } else if (opp_racket.offsetTop - 20 + opp_racket.clientHeight < ball.offsetTop) {
             animate(1000/fps, 25, function() {
                 if (opp_racket.getBoundingClientRect().bottom + 50 < game_window.getBoundingClientRect().bottom) {
-                    opp_racket.style.top = opp_racket.offsetTop + 2 + 'px';
+                    opp_racket.style.top = opp_racket.offsetTop + 5 + 'px';
                 }
             });
         }
-    }, 80);
+    }, 60);
 }
 
 function ball_move() {
