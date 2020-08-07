@@ -120,7 +120,7 @@ function check_beatoff() {
             }
 
             step_x = -step_x;
-            step_y = -step_y; 
+            //step_y = -step_y; 
             
             in_collision++;
         }
