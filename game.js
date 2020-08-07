@@ -11,7 +11,8 @@ let my_count = document.querySelector('#my-count'),
     ball_y = game_window.clientHeight / 2 - ball_rad / 2,
     step_x = 2,
     step_y = -2,
-    fps = 60;
+    fps = 60,
+    down = false;
 
 document.addEventListener('keydown', manage_start);
 
@@ -21,60 +22,72 @@ function get_random_integer(min, max) {
     return Math.floor(rand);
 }
 
-function animate(time, count, action) {
-    let i = 1,
-        interval = setInterval(function() {
-            action();
-
-            i++;
-            if (i == count) {
-                clearInterval(interval);
-            }                
-        }, time);
-
-    return interval
-}
-
 function is_collision(x1, y1, w1, h1, x2, y2, w2, h2) {
     return x1 + w1 > x2 && x1 < x2 + w2 && y1 + h1 > y2 && y1 < y2 + h2;
 
     //return x1 < (x2 + w2) && y1 < (y2 + h2) && (x1 + w1) > x2 && (y1 + h1) > y2;
 }
 
+function animate(time, count, action) {
+    let i = 1,
+        interval = setInterval(function() {
+            action();
+
+            i++;
+            if (i === count || (count === true && !down)) {
+                clearInterval(interval);
+            }
+        }, time);
+
+    return interval
+}
+
 function manage_start(event) {
-    if (event.which == 13) {
+    if (event.which == 32 || event.which == 13) {
         start_round();
     }
 }
 
-function manage_player(event) {
-    if (event.which == 38) {
-        if (my_racket.getBoundingClientRect().top - 50 > game_window.getBoundingClientRect().top) {
-            animate(1000/fps, 10, function() {
-                my_racket.style.top = my_racket.offsetTop - 5 + 'px';
+function manage_player_down(event) {
+    if (down == false) {
+        down = true;
+
+        if (event.which == 38 || event.which == 87) {
+            animate(1000/fps, down, function() {
+                if (down == true && my_racket.getBoundingClientRect().top - 50 > game_window.getBoundingClientRect().top) {
+                    my_racket.style.top = my_racket.offsetTop - 2 + 'px';
+                }
             });
-        }
-    } else if (event.which == 40) {
-        if (my_racket.getBoundingClientRect().bottom + 50 < game_window.getBoundingClientRect().bottom) {
-            animate(1000/fps, 10, function() {
-                my_racket.style.top = my_racket.offsetTop + 5 + 'px';
+        } else if (event.which == 40 || event.which == 83) {
+            animate(1000/fps, down, function() {
+                if (down == true && my_racket.getBoundingClientRect().bottom + 50 < game_window.getBoundingClientRect().bottom) {
+                    my_racket.style.top = my_racket.offsetTop + 2 + 'px';
+                }
             });
         }
     } 
 }
 
+function manage_player_up() {
+    down = false;
+}
+
 function manage_opponent() {
     setInterval(function () {
-        if (opp_racket.offsetTop + 20 > ball.offsetTop && opp_racket.getBoundingClientRect().top - 50 > game_window.getBoundingClientRect().top) {           
-            animate(1000/fps, 10, function() {
-                opp_racket.style.top = opp_racket.offsetTop - 5 + 'px';
+        if (opp_racket.offsetTop + 20 > ball.offsetTop) {
+            animate(1000/fps, 25, function() {
+                if (opp_racket.getBoundingClientRect().top - 50 > game_window.getBoundingClientRect().top) {
+                    opp_racket.style.top = opp_racket.offsetTop - 2 + 'px';
+                }
             });
-        } else if (opp_racket.offsetTop - 20 + opp_racket.clientHeight < ball.offsetTop && opp_racket.getBoundingClientRect().bottom + 50 < game_window.getBoundingClientRect().bottom) {
-            animate(1000/fps, 10, function() {
-                opp_racket.style.top = opp_racket.offsetTop + 5 + 'px';
+        } else if (opp_racket.offsetTop - 20 + opp_racket.clientHeight < ball.offsetTop) {
+            animate(1000/fps, 25, function() {
+                if (opp_racket.getBoundingClientRect().bottom + 50 < game_window.getBoundingClientRect().bottom) {
+                    opp_racket.style.top = opp_racket.offsetTop + 2 + 'px';
+                }
             });
         }
-    }, 50);
+    }, 80);
 }
 
 function ball_move() {
@@ -93,16 +106,16 @@ function check_beatoff() {
     if ((is_collision(my_racket.offsetLeft, my_racket.offsetTop, my_racket.clientWidth, my_racket.clientHeight, ball_x, ball_y, ball_rad, ball_rad)) ||
         (is_collision(opp_racket.offsetLeft, opp_racket.offsetTop, opp_racket.clientWidth, opp_racket.clientHeight, ball_x, ball_y, ball_rad, ball_rad))) {
         if (in_collision == 0) {
-            if (step_x < 15 && -15 < step_x) {
+            if (step_x < 10 && -10 < step_x) {
                 if (step_x > 0) {
-                    step_x += get_random_integer(1, 3);
+                    step_x += get_random_integer(1, 4);
                 } else {
-                    step_x -= get_random_integer(1, 3);
+                    step_x -= get_random_integer(1, 4);
                 }
                 if (step_y > 0) {
-                    step_y += get_random_integer(1, 3);
+                    step_y += get_random_integer(1, 4);
                 } else {
-                    step_y -= get_random_integer(1, 3);
+                    step_y -= get_random_integer(1, 4);
                 }
             }
 
@@ -121,13 +134,13 @@ function check_goal() {
         if (ball_x < 0 - ball_rad) {
             update_count(0);
 
-            step_x = -2;
-            step_y = 2;
+            step_x = 2;
+            step_y = -2;
         } else if (ball_x > game_window.clientWidth + ball_rad) {
             update_count(1);
 
-            step_x = 2;
-            step_y = -2;
+            step_x = -2;
+            step_y = 2;
         }       
         
         ball_x = game_window.clientWidth / 2 - ball_rad / 2;
@@ -156,12 +169,13 @@ function start_round() {
     ball.style.top = ball_y + 'px';        
     ball.style.left = ball_x + 'px';
 
-    animate(1000/fps, false, function() {
+    animate(1000/fps, 0, function() {
         ball_move();
         check_beatoff();
         check_goal();        
     });
 
-    document.addEventListener('keydown', manage_player);
+    document.addEventListener('keydown', manage_player_down);
+    document.addEventListener('keyup', manage_player_up);
     manage_opponent();
 }
