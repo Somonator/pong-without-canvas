@@ -87,7 +87,7 @@ function manage_opponent() {
                 }
             });
         }
-    }, 100);
+    }, 200);
 }
 
 function ball_move() {
