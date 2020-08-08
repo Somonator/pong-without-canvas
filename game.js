@@ -6,13 +6,13 @@ let my_count = document.querySelector('#my-count'),
     ball = document.querySelector('#ball'),
 
     in_collision = 0,
+    is_keydown = false,
     ball_rad = ball.clientWidth,
     ball_x = game_window.clientWidth / 2 - ball_rad / 2,
     ball_y = game_window.clientHeight / 2 - ball_rad / 2,
     step_x = 2,
     step_y = -2,
-    fps = 60,
-    down = false;
+    fps = 60;
 
 document.addEventListener('keydown', manage_start);
 
@@ -34,7 +34,7 @@ function animate(time, count, action) {
             action();
 
             i++;
-            if (i === count || (count === true && !down)) {
+            if (i === count || (count === true && !is_keydown)) {
                 clearInterval(interval);
             }
         }, time);
@@ -49,18 +49,18 @@ function manage_start(event) {
 }
 
 function manage_player_down(event) {
-    if (down == false) {
-        down = true;
+    if (is_keydown == false) {
+        is_keydown = true;
 
         if (event.which == 38 || event.which == 87) {
-            animate(1000/fps, down, function() {
-                if (down == true && my_racket.getBoundingClientRect().top - 50 > game_window.getBoundingClientRect().top) {
+            animate(1000/fps, is_keydown, function() {
+                if (is_keydown == true && my_racket.getBoundingClientRect().top - 10 > game_window.getBoundingClientRect().top) {
                     my_racket.style.top = my_racket.offsetTop - 5 + 'px';
                 }
             });
         } else if (event.which == 40 || event.which == 83) {
-            animate(1000/fps, down, function() {
-                if (down == true && my_racket.getBoundingClientRect().bottom + 50 < game_window.getBoundingClientRect().bottom) {
+            animate(1000/fps, is_keydown, function() {
+                if (is_keydown == true && my_racket.getBoundingClientRect().bottom + 10 < game_window.getBoundingClientRect().bottom) {
                     my_racket.style.top = my_racket.offsetTop + 5 + 'px';
                 }
             });
@@ -69,25 +69,25 @@ function manage_player_down(event) {
 }
 
 function manage_player_up() {
-    down = false;
+    is_keydown = false;
 }
 
 function manage_opponent() {
     setInterval(function () {
-        if (opp_racket.offsetTop + 20 > ball.offsetTop) {
+        if (opp_racket.offsetTop + 10 > ball.offsetTop) {
             animate(1000/fps, 25, function() {
-                if (opp_racket.getBoundingClientRect().top - 50 > game_window.getBoundingClientRect().top) {
+                if (opp_racket.getBoundingClientRect().top - 5 > game_window.getBoundingClientRect().top) {
                     opp_racket.style.top = opp_racket.offsetTop - 5 + 'px';
                 }
             });
-        } else if (opp_racket.offsetTop - 20 + opp_racket.clientHeight < ball.offsetTop) {
+        } else if (opp_racket.offsetTop - 10 + opp_racket.clientHeight < ball.offsetTop) {
             animate(1000/fps, 25, function() {
-                if (opp_racket.getBoundingClientRect().bottom + 50 < game_window.getBoundingClientRect().bottom) {
+                if (opp_racket.getBoundingClientRect().bottom + 5 < game_window.getBoundingClientRect().bottom) {
                     opp_racket.style.top = opp_racket.offsetTop + 5 + 'px';
                 }
             });
         }
-    }, 200);
+    }, 150);
 }
 
 function ball_move() {
@@ -107,16 +107,8 @@ function check_beatoff() {
         (is_collision(opp_racket.offsetLeft, opp_racket.offsetTop, opp_racket.clientWidth, opp_racket.clientHeight, ball_x, ball_y, ball_rad, ball_rad))) {
         if (in_collision == 0) {
             if (step_x < 10 && -10 < step_x) {
-                if (step_x > 0) {
-                    step_x += get_random_integer(1, 4);
-                } else {
-                    step_x -= get_random_integer(1, 4);
-                }
-                if (step_y > 0) {
-                    step_y += get_random_integer(1, 4);
-                } else {
-                    step_y -= get_random_integer(1, 4);
-                }
+                step_x > 0 ? step_x += get_random_integer(1, 3) : step_x -= get_random_integer(1, 3);
+                step_y > 0 ? step_y += get_random_integer(1, 3) : step_y -= get_random_integer(1, 3);
             }
 
             step_x = -step_x;
